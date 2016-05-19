@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.buaa.tezlikai.xmppchat"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="com.buaa.tezlikai.xmppchat"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,12 +24,19 @@
         </activity>
         <activity android:name=".activity.MainActivity">
         </activity>
-        <!--  provider清单注册 -->
+
+        <!-- provider清单注册 -->
         <provider
-            android:authorities="com.buaa.tezlikai.xmppchat.provider.ContactsProvicer"
-            android:name=".provider.ContactsProvicer"/>
+            android:name=".provider.ContactsProvicer"
+            android:authorities="com.buaa.tezlikai.xmppchat.provider.ContactsProvicer"/>
+        <provider
+            android:name=".provider.SmsProvider"
+            android:authorities="com.buaa.tezlikai.xmppchat.provider.SmsProvider"/>
+
         <service android:name=".srevice.IMService"/>
 
+        <activity android:name=".activity.ChatActivity">
+        </activity>
     </application>
 
 </manifest>

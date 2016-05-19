@@ -19,7 +19,7 @@ import org.jivesoftware.smack.XMPPException;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static final String HOST = "192.168.3.40";    // 主机ip
+    public static final String HOST = "192.168.3.65";    // 主机ip
     public static final int PORT = 5222;            // 对应的端口号
     public static final String SERVICENAME = "buaa.com";
 
@@ -82,6 +82,10 @@ public class LoginActivity extends AppCompatActivity {
 
                             //保存conn对象
                             IMService.conn = conn;
+
+                            //保存当前账户
+                            String account = userName + "@" + LOCATION_SERVICE ;
+                            IMService.mCurAccount = account;//admin@buaa.com
 
                             //启动service
                             Intent service = new Intent(LoginActivity.this,IMService.class);

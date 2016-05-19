@@ -2,6 +2,7 @@ package com.buaa.tezlikai.xmppchat.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,12 +12,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.buaa.tezlikai.xmppchat.R;
+import com.buaa.tezlikai.xmppchat.activity.ChatActivity;
 import com.buaa.tezlikai.xmppchat.dbhelper.ContactOpenHelper;
 import com.buaa.tezlikai.xmppchat.provider.ContactsProvicer;
 import com.buaa.tezlikai.xmppchat.utils.ThreadUtils;
@@ -59,10 +62,30 @@ public class ContactsFragment extends Fragment {
     }
 
     private void initData() {
-                setOrUpdateAdapter();//设置或更新Adapter
+                setOrNotifyAdapter();//设置或更新Adapter
     }
 
     private void initListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //需要把jid和昵称传过去
+                Cursor c = mAdapter.getCursor();
+                c.moveToPosition(position);
+
+                //拿到jid（账号）--> 发送消息的时候需要
+                String account = c.getString(c.getColumnIndex(ContactOpenHelper.ContactTable.ACCOUNT));
+                //拿到nickName--> 显示效果
+                String nickName = c.getString(c.getColumnIndex(ContactOpenHelper.ContactTable.NICKNAME));
+
+                Intent intent = new Intent(getActivity(),ChatActivity.class);
+                intent.putExtra(ChatActivity.CLICKACCOUNT,account);
+                intent.putExtra(ChatActivity.CLICKNICKNAME,nickName);
+
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -79,7 +102,7 @@ public class ContactsFragment extends Fragment {
     /**
      * 设置或更新Adapter
      */
-    private void setOrUpdateAdapter() {
+    private void setOrNotifyAdapter() {
 
         //判断adapter是否存在
         if (mAdapter != null) {
@@ -170,7 +193,7 @@ public class ContactsFragment extends Fragment {
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
             // 更新Adapter或者刷新Adapter
-            setOrUpdateAdapter();
+            setOrNotifyAdapter();
         }
     }
 
